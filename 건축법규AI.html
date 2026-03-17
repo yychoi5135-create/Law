@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>건축법규 AI — 법령·해석례·건설기준 통합 검색 & 무료 상담</title>
+<meta name="description" content="한국 건축 법규를 쉽고 빠르게. 법령, 해석례, KDS/KCS 건설기준코드 통합 검색 & 무료 상담. 로그인·설정 불필요.">
+<meta name="theme-color" content="#0C1222">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Noto Sans KR','DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:#F7F8FA;color:#1E293B;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+input:focus,textarea:focus,select:focus{outline:none}
+button{font-family:inherit}
+@keyframes su{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes pu{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+.header{background:linear-gradient(135deg,#0C1222,#1A2744,#263B5E);padding:26px 16px 18px;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 35px,rgba(255,255,255,.02) 35px,rgba(255,255,255,.02) 36px),repeating-linear-gradient(90deg,transparent,transparent 35px,rgba(255,255,255,.02) 35px,rgba(255,255,255,.02) 36px)}
+.header-inner{position:relative;z-index:1;max-width:700px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#EF4444,#F97316);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 18px rgba(239,68,68,.3);flex-shrink:0}
+.header h1{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:-.5px}
+.header h1 span{background:linear-gradient(135deg,#EF4444,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header p{font-size:10px;color:rgba(255,255,255,.4);font-weight:500;margin-top:2px}
+.container{max-width:700px;margin:0 auto;padding:10px 14px 120px}
+.tabs{display:flex;background:#EFF1F5;border-radius:12px;padding:3px;gap:3px;margin-bottom:10px}
+.tab{flex:1;padding:11px 0;border-radius:9px;border:none;cursor:pointer;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;background:transparent;color:#94A3B8}
+.tab.active{background:#fff;color:#0F172A;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+
+.search-bar{display:flex;align-items:center;background:#fff;border-radius:12px;padding:3px 13px;border:2px solid #EAECF0;margin-bottom:8px;transition:border .2s}
+.search-bar:focus-within{border-color:#EF4444}
+.search-bar input{flex:1;border:none;padding:11px 10px;font-size:13px;font-weight:500;background:transparent;color:#101828}
+.search-bar button{background:none;border:none;cursor:pointer;color:#98A2B3;padding:3px}
+
+.filters{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
+.filter-btn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:16px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.filter-btn.active{color:#fff}
+
+.cats{display:flex;gap:5px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.cat-btn{padding:6px 11px;border-radius:14px;border:none;cursor:pointer;font-size:11px;font-weight:700;white-space:nowrap;transition:all .2s;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+
+.results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.results-count{font-size:11px;color:#98A2B3;font-weight:600}
+.fav-btn{display:flex;align-items:center;gap:4px;background:transparent;border:1px solid transparent;border-radius:14px;padding:3px 9px;cursor:pointer;font-size:11px;font-weight:600;color:#98A2B3;transition:all .2s}
+.fav-btn.active{background:#FEF3C7;border-color:#FDE68A;color:#92400E}
+
+/* Card */
+.card{background:#fff;border:1px solid #EAECF0;border-radius:16px;padding:15px 17px;cursor:pointer;transition:all .22s;position:relative;animation:su .4s ease both}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.04)}
+.card.link-card{background:#F8FFF8}
+.card.link-card:hover{background:#F0FDF4}
+.card-badges{display:flex;align-items:center;gap:5px;margin-bottom:7px;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px}
+.card-title{font-weight:700;font-size:14px;color:#101828;margin-bottom:4px;line-height:1.45;padding-right:22px}
+.card-law{font-size:11px;color:#667085;font-weight:500}
+.card-fav{position:absolute;top:11px;right:11px;background:none;border:none;cursor:pointer;padding:2px;color:#D0D5DD;transition:color .2s}
+.card-fav.active{color:#F59E0B}
+
+/* Detail */
+.detail{animation:su .3s ease}
+.back-btn{display:flex;align-items:center;gap:5px;background:none;border:none;color:#667085;cursor:pointer;font-size:13px;font-weight:600;padding:7px 0;margin-bottom:12px}
+.detail-box{background:#fff;border-radius:18px;overflow:hidden;border:1px solid #EAECF0;box-shadow:0 4px 16px rgba(0,0,0,.04)}
+.detail-bar{height:5px}
+.detail-inner{padding:20px 20px 24px}
+.detail-title{font-size:19px;font-weight:800;color:#101828;margin:0 0 10px;line-height:1.4}
+.detail-law{font-size:12px;font-weight:600;margin-bottom:18px;padding:8px 13px;border-radius:8px;display:inline-block}
+.original-link{display:flex;align-items:center;gap:8px;padding:12px 16px;background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border-radius:12px;text-decoration:none;border:1px solid #BFDBFE;margin-bottom:18px;transition:all .2s}
+.original-link:hover{border-color:#3B82F6}
+.original-link .label{font-size:13px;font-weight:700;color:#1D4ED8}
+.original-link .url{font-size:10px;color:#64748B;margin-top:2px;word-break:break-all}
+
+/* Table */
+.data-table{margin-bottom:16px}
+.data-table .table-title{font-size:12px;font-weight:700;color:#1E293B;margin-bottom:8px}
+.data-table .table-wrap{overflow-x:auto;border-radius:10px;border:1px solid #E2E8F0}
+.data-table table{width:100%;border-collapse:collapse;font-size:12px}
+.data-table th{background:#F1F5F9;padding:8px 10px;text-align:left;font-weight:700;color:#334155;border-bottom:2px solid #CBD5E1;white-space:nowrap}
+.data-table td{padding:7px 10px;border-bottom:1px solid #F1F5F9;color:#475569}
+.data-table tr:nth-child(even){background:#F8FAFC}
+.data-table td:first-child{color:#1E293B;font-weight:600}
+
+.content-block{font-size:13px;color:#334155;line-height:1.85;white-space:pre-wrap;background:#F8FAFC;padding:18px 18px;border-radius:14px;border:1px solid #F1F5F9;font-family:'Noto Sans KR',monospace}
+.tags{margin-top:16px;display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:10px;color:#475467;background:#F1F5F9;padding:3px 10px;border-radius:12px;font-weight:500}
+.warning{margin-top:18px;padding:11px 14px;background:#FFFBEB;border-radius:10px;font-size:11px;color:#92400E;line-height:1.6;border:1px solid #FEF3C7}
+
+/* Related */
+.related{margin-top:18px}
+.related-title{font-size:12px;font-weight:700;color:#344054;margin-bottom:8px}
+.related-item{background:#fff;border:1px solid #EAECF0;border-radius:10px;padding:10px 13px;margin-bottom:5px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s}
+.related-item:hover{border-color:#3B82F688}
+.related-item.link{background:#F8FFF8}
+
+/* Chat */
+.chat-welcome{flex:1;display:flex;flex-direction:column;align-items:center;padding:24px 0}
+.chat-icon{width:60px;height:60px;border-radius:18px;background:linear-gradient(135deg,#0C1222,#1A2744);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:14px;box-shadow:0 8px 24px rgba(12,18,34,.25);animation:fl 3s ease-in-out infinite}
+.chat-q{text-align:left;padding:10px 13px;background:#fff;border:1px solid #EAECF0;border-radius:10px;cursor:pointer;font-size:12px;color:#344054;font-weight:500;transition:all .2s;width:100%;margin-bottom:5px}
+.chat-q:hover{border-color:#EF4444;background:#FEF2F2}
+.msg{display:flex;animation:su .3s ease}
+.msg-user{justify-content:flex-end}
+.msg-bubble{max-width:90%;padding:11px 15px;font-size:13px;line-height:1.8;white-space:pre-wrap}
+.msg-user .msg-bubble{background:linear-gradient(135deg,#0C1222,#1A2744);color:#fff;border-radius:15px 15px 4px 15px;box-shadow:0 3px 10px rgba(12,18,34,.12)}
+.msg-ai .msg-bubble{background:#fff;color:#344054;border-radius:15px 15px 15px 4px;box-shadow:0 2px 8px rgba(0,0,0,.03);border:1px solid #EAECF0}
+.msg-ai .msg-label{font-size:10px;font-weight:700;color:#EF4444;margin-bottom:5px}
+.loading-dots{display:flex;align-items:center;gap:8px;padding:8px 0}
+.loading-dots .dot{width:7px;height:7px;border-radius:50%;background:#EF4444}
+.loading-dots .dot:nth-child(1){animation:pu 1.2s ease infinite}
+.loading-dots .dot:nth-child(2){animation:pu 1.2s ease .2s infinite}
+.loading-dots .dot:nth-child(3){animation:pu 1.2s ease .4s infinite}
+
+.chat-input-wrap{position:sticky;bottom:0;background:linear-gradient(transparent,#F7F8FA 20%);padding-top:14px}
+.chat-new{display:block;margin:0 auto 7px;background:none;border:1px solid #E2E8F0;border-radius:14px;padding:4px 12px;cursor:pointer;font-size:10px;color:#94A3B8;font-weight:600}
+.chat-input{display:flex;align-items:center;gap:6px;background:#fff;border-radius:13px;padding:3px 5px 3px 15px;border:2px solid #EAECF0;transition:border .2s}
+.chat-input:focus-within{border-color:#EF4444}
+.chat-input input{flex:1;border:none;padding:11px 0;font-size:13px;font-weight:500;background:transparent;color:#101828}
+.send-btn{width:38px;height:38px;border-radius:10px;border:none;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;cursor:pointer}
+.send-btn.active{background:linear-gradient(135deg,#EF4444,#F97316);color:#fff;box-shadow:0 4px 12px rgba(239,68,68,.25)}
+.send-btn.inactive{background:#F2F4F7;color:#CBD5E1;cursor:default}
+
+.no-results{text-align:center;padding:44px 20px;color:#98A2B3}
+.no-results .icon{font-size:40px;margin-bottom:10px}
+.no-results .title{font-size:15px;font-weight:700;color:#667085}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ═══════════════════════════════════════════════════
+// 건축법규 AI — 단일 HTML 배포 파일
+// ═══════════════════════════════════════════════════
+
+const DB=[
+{id:1,cat:"계획",sub:"용도지역",title:"건폐율 기준 (전체 용도지역)",type:"detail",source:"LAW",code:"",law:"국토의 계획 및 이용에 관한 법률 제77조, 시행령 제84조",url:"https://www.law.go.kr/법령/국토의계획및이용에관한법률시행령/(20250227,35148,20250227)/제84조",tables:[{title:"용도지역별 건폐율 상한",headers:["용도지역","건폐율 상한","비고"],rows:[["제1종 전용주거","50%","단독주택"],["제2종 전용주거","50%","공동주택"],["제1종 일반주거","60%","저층"],["제2종 일반주거","60%","중층"],["제3종 일반주거","50%","중·고층"],["준주거","70%","주거+상업"],["중심상업","90%","도심"],["일반상업","80%",""],["근린상업","70%",""],["유통상업","80%",""],["전용공업","70%",""],["일반공업","70%",""],["준공업","70%",""],["보전녹지","20%",""],["생산녹지","20%",""],["자연녹지","20%",""]]}],content:"▣ 건폐율 = (건축면적 ÷ 대지면적) × 100%\n\n▣ 적용 원칙\n① 2이상 용도지역 걸치면 → 면적비율 가중평균\n② 지자체 조례로 상한 이내 별도 규정 가능\n③ 방화지구: 최대 10%p 가산 완화\n④ 도시형생활주택·역세권 추가 완화 가능\n\n▣ 실무 TIP\n• 건축면적 = 외벽/기둥 중심선 수평투영면적\n• 처마·차양 1m+ 돌출시 1m 후퇴선에서 산정\n• 대지면적에서 도로편입 부분 제외",tags:["건폐율","용도지역","주거지역","상업지역"]},
+
+{id:2,cat:"계획",sub:"용도지역",title:"용적률 기준 (전체 용도지역)",type:"detail",source:"LAW",code:"",law:"국토의 계획 및 이용에 관한 법률 제78조, 시행령 제85조",url:"https://www.law.go.kr/법령/국토의계획및이용에관한법률시행령/(20250227,35148,20250227)/제85조",tables:[{title:"용도지역별 용적률",headers:["용도지역","하한","상한","서울 조례(참고)"],rows:[["제1종전용주거","50%","100%","100%"],["제2종전용주거","100%","150%","120%"],["제1종일반주거","100%","200%","150%"],["제2종일반주거","150%","250%","200%"],["제3종일반주거","200%","300%","250%"],["준주거","200%","500%","400%"],["중심상업","200%","1500%","1000%"],["일반상업","200%","1300%","800%"],["근린상업","200%","900%","600%"],["전용공업","150%","300%","200%"],["준공업","200%","400%","400%"],["자연녹지","50%","100%","50~100%"]]}],content:"▣ 용적률 = (지상층 연면적 합계 ÷ 대지면적) × 100%\n\n▣ 연면적 산정 제외\n① 지하층 ② 지상주차장(부설) ③ 피난안전구역\n\n▣ 용적률 완화(인센티브)\n• 공개공지: 최대 1.2배\n• 친환경인증: 최대 115%\n• 역세권 도시형생활주택: 최대 1.5배\n\n▣ 실무\n• 용적률 산정용 연면적 ≠ 대장상 연면적\n• 개방형 필로티: 용적률 제외\n• 벽체형 필로티: 포함 (주차장법 부설은 제외 가능)",tags:["용적률","용도지역","연면적","인센티브"]},
+
+{id:3,cat:"계획",sub:"일조",title:"일조권 사선제한 (정북방향)",type:"detail",source:"LAW",code:"",law:"건축법 제61조, 시행령 제86조",url:"https://www.law.go.kr/법령/건축법시행령/(20250227,35148,20250227)/제86조",tables:[{title:"정북방향 이격거리",headers:["건축물 높이","이격거리"],rows:[["9m 이하","대지경계선에서 1.5m 이상"],["9m 초과","대지경계선에서 h/2 이상"]]}],content:"▣ 적용: 전용·일반주거지역 내 건축물\n\n▣ 단면 해설\n\n          ┌──┐\n     h/2  │  │ h>9m\n    ←───→ │  │\n    1.5m  │  │ ≤9m\n   ←───→  │  │\n──────────┴──┴──── 지표면\n   ↑ 대지경계선\n\n▣ 공동주택 동간거리\n• 채광창 벽면 직각방향 = 높이의 1배 이상\n• 최소 8m 이상\n\n▣ TIP\n• '정북방향' = 진북 기준\n• 곡선 경계: 접선 수직방향 측정\n• 각 부분마다 개별 적용",tags:["일조권","사선제한","정북방향","이격거리","동간거리"]},
+
+{id:4,cat:"설계",sub:"주차",title:"부설주차장 설치 기준 (상세)",type:"detail",source:"LAW",code:"",law:"주차장법 시행령 제6조, 별표1",url:"https://www.law.go.kr/법령/주차장법시행령/(20250522,35301,20250222)/제6조",tables:[{title:"시설물별 주차 기준",headers:["시설물","기준","산정"],rows:[["단독주택","50㎡초과 1대","면적"],["다세대(≤85㎡)","세대당 0.7대","세대"],["다세대(>85㎡)","세대당 1대","세대"],["아파트(≤85㎡)","세대당 1대","세대"],["아파트(>85㎡)","세대당 1.2~1.5대","세대"],["제1종근생","134㎡당 1대","면적"],["제2종근생","134㎡당 1대","면적"],["판매시설","134㎡당 1대","면적"],["업무시설","100㎡당 1대","면적"],["종합병원","100㎡당 1대","면적"],["문화·집회","100㎡당 1대","면적"],["공장","300㎡당 1대","면적"]]},{title:"주차장 규격",headers:["구분","너비","길이"],rows:[["일반형","2.5m+","5.0m+"],["확장형","2.6m+","5.2m+"],["장애인","3.3m+","5.0m+"],["경형","2.0m+","3.6m+"]]}],content:"▣ 계산 예시\n┌────────────────────────────┐\n│ 1층 근생 800㎡ + 2~3층 업무 1,200㎡ │\n│ 근생: 800÷134 = 6대              │\n│ 업무: 1,200÷100 = 12대           │\n│ 합계: 18대 (장애인 1대 포함)      │\n└────────────────────────────┘\n\n▣ 차로: 일방 3.0m / 양방 5.5m\n▣ 경사로: 직선 17% / 곡선 14% 이하\n▣ 역세권 300m: 최대 50% 감면 가능",tags:["주차","주차장","주차대수","근생","아파트"]},
+
+{id:5,cat:"설계",sub:"방화",title:"방화구획 기준 (상세)",type:"detail",source:"LAW",code:"",law:"건축법 시행령 제46조",url:"https://www.law.go.kr/법령/건축법시행령/(20250227,35148,20250227)/제46조",tables:[{title:"방화구획 면적",headers:["구분","일반","스프링클러"],rows:[["10층 이하","1,000㎡","3,000㎡ (3배)"],["11층 이상","200㎡","600㎡ (3배)"],["필로티","별도 구획","별도 구획"]]},{title:"구성요소",headers:["부위","기준"],rows:[["벽","내화구조 (1~3시간)"],["방화문","갑종/을종 (자동폐쇄)"],["관통부","내화충전구조"],["덕트","방화댐퍼 (FD/FSD)"]]}],content:"▣ 대상: 내화구조 + 연면적 1,000㎡ 초과\n\n▣ 방화문 종류\n• 갑종: 비차열60분+차열30분 → 방화구획·계단실\n• 을종: 비차열30분 → 보조 구획·복도\n• 자동폐쇄장치 필수 (연기/열감지 연동)\n\n▣ 방화댐퍼\n• FD: 열감지 자동폐쇄\n• FSD: 열+연기 감지 자동폐쇄\n• KS F 2815 시험기준",tags:["방화구획","내화구조","방화문","방화댐퍼","FSD"]},
+
+{id:6,cat:"설계",sub:"피난",title:"직통계단·피난계단 기준",type:"detail",source:"LAW",code:"",law:"건축법 시행령 제34~35조",url:"https://www.law.go.kr/법령/건축법시행령/(20250227,35148,20250227)/제34조",tables:[{title:"보행거리",headers:["구조","상한"],rows:[["일반","30m"],["내화/불연","50m"]]},{title:"2개이상 직통계단",headers:["대상","면적"],rows:[["문화·집회(지하)","200㎡+"],["3층 이상","300㎡+"],["지하층","200㎡+"]]}],content:"▣ 피난계단: 5층+ 또는 지하2층-\n▣ 특별피난계단: 11층+ (공동주택 16층+)\n  → 부속실 6㎡+, 제연설비 필수\n  → 방연풍속 0.5m/s+, 차압 40~60Pa\n\n▣ 2개 직통계단 이격\n출구간 직선거리 = 보행거리의 1/2 이상",tags:["직통계단","피난계단","특별피난계단","보행거리"]},
+
+{id:7,cat:"구조",sub:"내진",title:"내진설계 대상·등급",type:"detail",source:"LAW",code:"KDS 41 17 00",law:"건축법 제48조 / KDS 41 17 00",url:"https://www.law.go.kr/법령/건축법/(20251001,21065,20250401)/제48조",tables:[{title:"내진설계 의무 대상",headers:["조건","기준"],rows:[["층수","2층+"],["연면적","200㎡+ (목구조500㎡+)"],["높이","13m+"],["처마","9m+"],["기둥간","10m+"]]},{title:"내진등급",headers:["등급","대상","재현주기"],rows:[["특(S)","원자력","10,000년"],["I","소방서·병원","2,400년"],["II","일반건축물","2,400년"]]}],content:"▣ 지역계수: I구역 0.11g (서울등) / II구역 0.07g\n▣ 구조기술사 날인: 3층+ 또는 1,000㎡+\n▣ 특수구조(6층+특수, 캔틸레버5m+, 기둥간20m+): 구조기술사 필수",tags:["내진","내진설계","지진","KDS"]},
+
+{id:8,cat:"구조",sub:"하중",title:"활하중·고정하중 기준",type:"detail",source:"KCSC",code:"KDS 41 10 15",law:"KDS 41 10 05 / KDS 41 10 15",url:"https://www.kcsc.re.kr/Search/ListCodes?query=KDS+41+10",tables:[{title:"용도별 활하중",headers:["용도","kN/㎡"],rows:[["주택·아파트","2.0"],["복도·계단","3.0"],["사무실","2.5"],["상점(1층)","4.0"],["학교교실","3.0"],["서고","7.5"],["극장(고정석)","3.0"],["차고(승용)","2.5"],["차고(트럭)","12.0"],["옥상정원","3.0"],["공장(경)","4.0"],["창고(중)","12.0"]]}],content:"▣ 단위중량: RC 24kN/㎥ / 철골 77kN/㎥ / 목재 5~8kN/㎥\n\n▣ 하중조합 (강도설계)\n① 1.4D\n② 1.2D+1.6L+0.5(Lr/S/R)\n③ 1.2D+1.0E+L\n④ 0.9D+1.0E\n\n▣ 슬래브자중 예: 210mm RC = 5.04kN/㎡",tags:["활하중","고정하중","하중조합","KDS"]},
+
+{id:9,cat:"설비",sub:"소방",title:"스프링클러 설치 기준",type:"detail",source:"LAW",code:"",law:"소방시설법, NFSC 103",url:"https://www.law.go.kr/법령/화재의예방및안전관리에관한법률",tables:[{title:"설치 대상",headers:["대상","기준"],rows:[["수용인원","100명+"],["층수","11층+(아파트제외)"],["지하층","1,000㎡+"],["근생","1,000㎡+"],["판매·복합","5,000㎡+"]]}],content:"▣ 헤드: 1개 방호 21㎡ (내화13㎡)\n▣ 수원: 30개×80L/min×20분 = 48㎥+\n\n▣ 방식비교\n• 습식: 항상 물 충수 → 반응 빠름 (일반)\n• 건식: 압축공기 → 동파방지 (비난방)\n• 준비작동: 감지기→밸브 → 오작동방지 (전산실)\n• 일제살수: 전헤드 동시 → 위험물저장소",tags:["스프링클러","소방","NFSC"]},
+
+{id:10,cat:"설비",sub:"기계",title:"승강기 설치 기준",type:"detail",source:"LAW",code:"",law:"건축법 제64조, 시행령 제89조",url:"https://www.law.go.kr/법령/건축법시행령/(20250227,35148,20250227)/제89조",tables:[{title:"설치 대수",headers:["6층↑ 거실면적","대수"],rows:[["~3,000㎡","1대"],["~5,000㎡","2대"],["~7,000㎡","3대"],["이후 2,000㎡마다","+1대"]]}],content:"▣ 의무: 6층+ 연면적 2,000㎡+\n▣ 비상용: 높이 31m 초과 (비상전원, 소방관전용1대)\n▣ 장애인용: 6층+ 신축 (1.1m×1.35m, 출입문0.8m+)",tags:["승강기","엘리베이터","비상용승강기"]},
+
+{id:11,cat:"시공",sub:"콘크리트",title:"콘크리트 양생·품질 기준",type:"detail",source:"KCSC",code:"KCS 14 20 10",law:"KCS 14 20 10",url:"https://www.kcsc.re.kr/Search/ListCodes?query=KCS+14+20+10",tables:[{title:"습윤양생 기간",headers:["기온","기간"],rows:[["15℃+","5일+"],["10~15℃","7일+"],["5~10℃","9일+"]]},{title:"거푸집 해체 강도",headers:["부재","최소강도"],rows:[["기둥·벽 측면","5MPa+"],["슬래브·보 하부","fck×2/3"],["캔틸레버","fck×100%"]]}],content:"▣ 한중(4℃-): 5℃이상 2일유지, 보온양생\n▣ 서중(25℃+): 타설90분내, 온도35℃이하\n▣ 슬럼프허용: ±25mm\n▣ 압축강도: 3회평균≥fck, 개별≥fck-3.5MPa\n▣ 콜드조인트: 25℃이하 2.5h내 / 25℃+ 2h내",tags:["양생","콘크리트","한중","서중","KCS"]},
+
+{id:12,cat:"해석례",sub:"국토부",title:"필로티 주차장 바닥면적 산정",type:"detail",source:"AURI",code:"",law:"법제처 해석례",url:"https://brb.auri.re.kr/board.es?mid=a10202030000&bid=0010",tables:[],content:"▣ 질의: 필로티 1층 주차장이 바닥면적에 포함되는지?\n\n▣ 해석\n• 기둥만 + 벽없는 개방형 → 면적 제외 ✅\n• 벽체로 둘러싸면 → 면적 포함 ❌\n\n▣ 판단 기준\n┌────────────────────────────┐\n│ 기둥만 + 개방 → 제외 ✅    │\n│ ┌──┐  ┌──┐ ← 벽 없음      │\n│ │기│  │기│                  │\n│ └──┘  └──┘                  │\n├────────────────────────────┤\n│ 벽체 둘러쌈 → 포함 ❌      │\n│ ┌──────────┐ ← 벽 있음     │\n│ │ 주차장   │                │\n│ └──────────┘                │\n└────────────────────────────┘\n\n▣ 용적률에서도 동일 기준 적용",tags:["필로티","바닥면적","용적률","해석례"]},
+
+// ── 원문연결 전용 ──
+{id:100,cat:"원문",sub:"법령",title:"📜 건축법 전문",type:"link",source:"LAW",code:"",law:"건축법 [법률 제21065호]",url:"https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=263954&ancYnChk=0#0000",content:"건축법 전체 조문 원문",tags:["건축법","원문"]},
+{id:101,cat:"원문",sub:"법령",title:"📜 건축법 시행령 전문",type:"link",source:"LAW",code:"",law:"건축법 시행령",url:"https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=273503&ancYnChk=0#0000",content:"별표1(용도별 건축물) 포함",tags:["건축법시행령","원문"]},
+{id:102,cat:"원문",sub:"법령",title:"📜 국토계획법 시행령 전문",type:"link",source:"LAW",code:"",law:"국토의 계획 및 이용에 관한 법률 시행령",url:"https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=272601&ancYnChk=0#0000",content:"건폐율(제84조), 용적률(제85조) 포함",tags:["국토계획법","원문"]},
+{id:103,cat:"원문",sub:"법령",title:"📜 피난·방화구조 기준 규칙 전문",type:"link",source:"LAW",code:"",law:"피난방화규칙",url:"https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=271027&ancYnChk=0#0000",content:"내화구조, 방화문, 비상구 상세기준",tags:["피난방화","원문"]},
+{id:104,cat:"원문",sub:"법령",title:"📜 소방시설법 전문",type:"link",source:"LAW",code:"",law:"화재예방안전관리법",url:"https://www.law.go.kr/법령/화재의예방및안전관리에관한법률",content:"소방시설 설치·유지 전체",tags:["소방","원문"]},
+{id:110,cat:"원문",sub:"KDS",title:"📐 KDS 14 20 콘크리트구조 설계기준",type:"link",source:"KCSC",code:"KDS 14 20",law:"콘크리트구조 설계기준",url:"https://www.kcsc.re.kr/Search/ListCodes?query=KDS+14+20",content:"콘크리트 설계기준 전체",tags:["KDS","콘크리트","원문"]},
+{id:111,cat:"원문",sub:"KDS",title:"📐 KDS 14 31 강구조 설계기준",type:"link",source:"KCSC",code:"KDS 14 31",law:"강구조 설계기준",url:"https://www.kcsc.re.kr/Search/ListCodes?query=KDS+14+31",content:"강구조 설계기준 전체",tags:["KDS","강구조","원문"]},
+{id:112,cat:"원문",sub:"KDS",title:"📐 KDS 41 건축구조 설계기준 전체",type:"link",source:"KCSC",code:"KDS 41",law:"건축구조 설계기준",url:"https://www.kcsc.re.kr/Search/ListCodes?query=KDS+41",content:"건축물 하중, 내진, 구조 전체",tags:["KDS","건축구조","원문"]},
+{id:120,cat:"원문",sub:"KCS",title:"📐 KCS 14 20 콘크리트공사 표준시방서",type:"link",source:"KCSC",code:"KCS 14 20",law:"콘크리트공사",url:"https://www.kcsc.re.kr/Search/ListCodes?query=KCS+14+20",content:"콘크리트 시공기준 전체",tags:["KCS","콘크리트","원문"]},
+{id:121,cat:"원문",sub:"KCS",title:"📐 KCS 41 방수·단열·마감 표준시방서",type:"link",source:"KCSC",code:"KCS 41",law:"건축공사 표준시방서",url:"https://www.kcsc.re.kr/Search/ListCodes?query=KCS+41",content:"방수, 단열, 도장, 커튼월 등",tags:["KCS","방수","단열","원문"]},
+{id:130,cat:"원문",sub:"전문시방서",title:"📐 INHCS 일반국도 전문시방서",type:"link",source:"KCSC",code:"INHCS",law:"일반국도공사",url:"https://www.kcsc.re.kr/standardCode/list/1050",content:"토공, 포장, 교량, 터널",tags:["INHCS","원문"]},
+{id:131,cat:"원문",sub:"전문시방서",title:"📐 SMCS 서울시 전문시방서",type:"link",source:"KCSC",code:"SMCS",law:"서울시 건설공사",url:"https://www.kcsc.re.kr/standardCode/list/1070",content:"서울시 건설공사 시공기준",tags:["SMCS","서울시","원문"]},
+{id:132,cat:"원문",sub:"전문시방서",title:"📐 EXCS 고속도로 전문시방서",type:"link",source:"KCSC",code:"EXCS",law:"고속도로공사",url:"https://www.kcsc.re.kr/standardCode/list/1060",content:"한국도로공사 시공기준",tags:["EXCS","고속도로","원문"]},
+{id:133,cat:"원문",sub:"전문시방서",title:"📐 KRCCS 농업생산기반 전문시방서",type:"link",source:"KCSC",code:"KRCCS",law:"농업생산기반시설",url:"https://www.kcsc.re.kr/standardCode/list/1080",content:"수로, 양수장 등",tags:["KRCCS","원문"]},
+{id:134,cat:"원문",sub:"전문시방서",title:"📐 KRACS 철도건설 전문시방서",type:"link",source:"KCSC",code:"KRACS",law:"철도건설공사",url:"https://www.kcsc.re.kr/standardCode/list/1090",content:"궤도, 노반, 전기, 신호",tags:["KRACS","철도","원문"]},
+{id:135,cat:"원문",sub:"전문시방서",title:"📐 LHCS LH 전문시방서",type:"link",source:"KCSC",code:"LHCS",law:"LH 한국토지주택공사",url:"https://www.kcsc.re.kr/standardCode/list/1100",content:"공동주택·택지 시공기준",tags:["LHCS","LH","원문"]},
+{id:136,cat:"원문",sub:"전문시방서",title:"📐 KWCS K-water 전문시방서",type:"link",source:"KCSC",code:"KWCS",law:"K-water 한국수자원공사",url:"https://www.kcsc.re.kr/standardCode/list/1110",content:"상수도, 댐, 저수지",tags:["KWCS","K-water","원문"]},
+{id:140,cat:"원문",sub:"해석례",title:"📋 국토부 건축법 해석례 전체",type:"link",source:"AURI",code:"",law:"건축규제혁신센터",url:"https://brb.auri.re.kr/board.es?mid=a10202060000&bid=0013",content:"국토교통부 건축법 해석례 목록",tags:["해석례","국토부","원문"]},
+{id:141,cat:"원문",sub:"해석례",title:"📋 법제처 건축법 해석례 전체",type:"link",source:"AURI",code:"",law:"건축규제혁신센터",url:"https://brb.auri.re.kr/board.es?mid=a10202030000&bid=0010",content:"법제처 건축법 해석례 목록",tags:["해석례","법제처","원문"]},
+{id:142,cat:"원문",sub:"해석례",title:"📋 건축법 판례 전체",type:"link",source:"AURI",code:"",law:"건축규제혁신센터",url:"https://brb.auri.re.kr/board.es?mid=a10202040000&bid=0011",content:"대법원·고등법원 판례",tags:["판례","원문"]},
+];
+
+const CATS=[
+{id:"all",label:"전체",icon:"◎",color:"#475569"},
+{id:"계획",label:"계획",icon:"▲",color:"#2563EB"},
+{id:"설계",label:"설계",icon:"◆",color:"#7C3AED"},
+{id:"구조",label:"구조",icon:"●",color:"#DC2626"},
+{id:"설비",label:"설비",icon:"■",color:"#059669"},
+{id:"시공",label:"시공",icon:"★",color:"#D97706"},
+{id:"해석례",label:"해석례",icon:"§",color:"#BE185D"},
+{id:"원문",label:"원문연결",icon:"↗",color:"#0891B2"},
+];
+
+const POPQ=["3층 근생 주차 몇 대?","제2종일반주거 건폐율·용적률?","방화구획 기준?","내진설계 조건?","일조권 이격거리?","승강기 몇 대?","콘크리트 양생 기간?","필로티 바닥면적?"];
+
+const SRC={LAW:{name:"법령",icon:"⚖️",color:"#1D4ED8"},AURI:{name:"해석례",icon:"📋",color:"#7C3AED"},KCSC:{name:"건설기준",icon:"📐",color:"#059669"}};
+
+// ═══ STATE ═══
+let state={tab:"search",q:"",cat:"all",typeF:"all",sel:null,favs:JSON.parse(localStorage.getItem("archlaw_favs")||"[]"),msgs:[],ci:"",ld:false};
+let composing=false; // 한글 입력 중 여부
+let searchTimer=null;
+
+function setState(updates){Object.assign(state,updates);render();}
+function saveFavs(){localStorage.setItem("archlaw_favs",JSON.stringify(state.favs));}
+function togFav(id){state.favs=state.favs.includes(id)?state.favs.filter(f=>f!==id):[...state.favs,id];saveFavs();render();}
+
+// 한글+영어 입력 모두 지원
+function onSearchInput(el){
+  state.q=el.value;
+  if(!composing){
+    clearTimeout(searchTimer);
+    searchTimer=setTimeout(()=>{
+      const si=app.querySelector('.search-bar input');
+      const cursorPos=si?si.selectionStart:0;
+      render();
+      // 렌더 후 포커스·커서 복원
+      requestAnimationFrame(()=>{
+        const newSi=document.querySelector('.search-bar input');
+        if(newSi){
+          newSi.focus();
+          newSi.value=state.q;
+          newSi.setSelectionRange(cursorPos,cursorPos);
+        }
+      });
+    },200);
+  }
+}
+function onSearchCompositionEnd(el){
+  composing=false;
+  state.q=el.value;
+  clearTimeout(searchTimer);
+  const cursorPos=el.selectionStart;
+  render();
+  requestAnimationFrame(()=>{
+    const newSi=document.querySelector('.search-bar input');
+    if(newSi){
+      newSi.focus();
+      newSi.value=state.q;
+      newSi.setSelectionRange(cursorPos,cursorPos);
+    }
+  });
+}
+
+// ═══ FILTER ═══
+function getFiltered(){
+  return DB.filter(item=>{
+    if(state.typeF==="detail"&&item.type!=="detail")return false;
+    if(state.typeF==="link"&&item.type!=="link")return false;
+    if(state.cat!=="all"&&item.cat!==state.cat)return false;
+    if(!state.q)return true;
+    const s=state.q.toLowerCase();
+    return item.title.toLowerCase().includes(s)||item.content.toLowerCase().includes(s)||item.tags.some(t=>t.toLowerCase().includes(s))||item.law.toLowerCase().includes(s)||(item.code||"").toLowerCase().includes(s);
+  });
+}
+
+// ═══ CHAT (Google Gemini AI — 무료 무제한) ═══
+const GEMINI_KEY="AIzaSyBxLVBoGlKAWDCzUTwdhfUN50GuE6w8cQY";
+
+async function sendChat(){
+  if(!state.ci.trim()||state.ld)return;
+  const u=state.ci.trim();
+  state.msgs.push({role:"user",text:u});
+  setState({ci:"",ld:true});
+  const ctx=DB.filter(x=>x.type==="detail").map(l=>`[${l.code||l.cat}] ${l.title}\n${l.law}\n${l.content}`).join("\n---\n");
+  try{
+    const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="+GEMINI_KEY,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        system_instruction:{parts:[{text:"당신은 한국 건축·건설 법규 전문 AI '건축법규 AI'입니다.\n\n3개 데이터 출처를 활용합니다:\n1. 국가법령정보센터(law.go.kr): 건축법, 시행령, 관련법률\n2. 건축규제혁신센터(brb.auri.re.kr): 국토부/법제처 해석례, 판례\n3. 국가건설기준센터(kcsc.re.kr): KDS 설계기준, KCS 표준시방서, 전문시방서\n\n답변 규칙:\n- 관련 법령·기준코드를 반드시 명시 (예: KDS 41 17 00, 건축법 제48조)\n- 구체적 수치와 기준값 포함\n- 학생·건축주·실무자 모두 이해할 수 있게 쉽게 설명\n- 출처 구분 명시 (법령/해석례/건설기준)\n- 표 형태로 정리할 수 있는 내용은 표로 정리\n- 마지막에 반드시 '※ 실무 적용 시 원문 확인 필수 (law.go.kr / kcsc.re.kr / brb.auri.re.kr)' 추가\n\n아래는 참고용 법규 데이터베이스입니다. 이 데이터를 우선 활용하되, 데이터에 없는 건축 법규 지식도 활용하여 답변하세요.\n\n=== 법규 데이터베이스 ===\n"+ctx}]},
+        contents:[{role:"user",parts:[{text:u}]}],
+        generationConfig:{maxOutputTokens:2000,temperature:0.3}
+      })
+    });
+    const d=await r.json();
+    if(d.error){
+      state.msgs.push({role:"assistant",text:"⚠️ AI 응답 오류: "+(d.error.message||"잠시 후 다시 시도해주세요.")});
+    }else{
+      const txt=d.candidates?.[0]?.content?.parts?.map(p=>p.text||"").join("")||"답변을 생성하지 못했습니다. 다시 질문해주세요.";
+      state.msgs.push({role:"assistant",text:txt});
+    }
+  }catch(e){
+    state.msgs.push({role:"assistant",text:"⚠️ 네트워크 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.\n\n검색 탭에서 직접 찾아보실 수도 있습니다."});
+  }
+  setState({ld:false});
+  setTimeout(()=>{const el=document.getElementById("chatEnd");el&&el.scrollIntoView({behavior:"smooth"});},100);
+}
+
+// ═══ RENDER TABLE ═══
+function renderTable(t){
+  return `<div class="data-table">${t.title?`<div class="table-title">${t.title}</div>`:""}<div class="table-wrap"><table><thead><tr>${t.headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${t.rows.map((r,i)=>`<tr>${r.map((c,j)=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>`;
+}
+
+// ═══ RENDER ═══
+function render(){
+  const app=document.getElementById("app");
+  const filtered=getFiltered();
+  const detailN=DB.filter(x=>x.type==="detail").length;
+  const linkN=DB.filter(x=>x.type==="link").length;
+
+  let html=`
+  <div class="header">
+    <div class="header-inner">
+      <div class="logo">🏛️</div>
+      <div><h1>건축법규 <span>AI</span></h1><p>상세해설 ${detailN}건 + 원문연결 ${linkN}건 · Gemini AI 무료 상담 · 설정 불필요</p></div>
+    </div>
+    <div style="position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:2">
+      <a href="https://law.go.kr" target="_blank" style="color:rgba(255,255,255,.5);font-size:10px;text-decoration:none;padding:6px 10px;border:1px solid rgba(255,255,255,.1);border-radius:8px;transition:all .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">⚖️ 법령</a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="tabs">
+      <button class="tab ${state.tab==="search"?"active":""}" onclick="setState({tab:'search',sel:null})">📖 법규 검색</button>
+      <button class="tab ${state.tab==="chat"?"active":""}" onclick="setState({tab:'chat',sel:null})">💬 AI 상담</button>
+    </div>`;
+
+  // ── SEARCH TAB ──
+  if(state.tab==="search"){
+    if(state.sel){
+      const it=state.sel;const c=CATS.find(x=>x.id===it.cat);const src=SRC[it.source];
+      const related=DB.filter(l=>l.id!==it.id&&(l.cat===it.cat||l.tags.some(t=>it.tags.includes(t)))).slice(0,4);
+      html+=`<div class="detail">
+        <button class="back-btn" onclick="setState({sel:null})">◁ 목록</button>
+        <div class="detail-box">
+          <div class="detail-bar" style="background:linear-gradient(90deg,${c?.color||"#999"},${c?.color||"#999"}66)"></div>
+          <div class="detail-inner">
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">
+              <span class="badge" style="color:#fff;background:${c?.color}">${c?.icon} ${it.cat}·${it.sub}</span>
+              ${src?`<span class="badge" style="color:${src.color};background:${src.color}10">${src.icon} ${src.name}</span>`:""}
+              ${it.code?`<span class="badge" style="color:#0891B2;background:#ECFEFF">📐 ${it.code}</span>`:""}
+            </div>
+            <h2 class="detail-title">${it.title}</h2>
+            <div class="detail-law" style="color:${c?.color};background:${c?.color}06;border-left:3px solid ${c?.color}">📜 ${it.law}</div>
+            ${it.url?`<a href="${it.url}" target="_blank" rel="noopener noreferrer" class="original-link">
+              <span style="font-size:20px">📄</span>
+              <div><div class="label">원문 직접 확인 →</div><div class="url">${it.url.substring(0,65)}...</div></div>
+              <span style="color:#64748B">↗</span>
+            </a>`:""}
+            ${(it.tables||[]).map(renderTable).join("")}
+            <div class="content-block">${it.content}</div>
+            <div class="tags">${it.tags.map(t=>`<span class="tag">#${t}</span>`).join("")}</div>
+            <div class="warning">⚠️ 참고용입니다. 위 "원문 직접 확인" 링크에서 최신 법령/기준을 반드시 확인하세요.</div>
+          </div>
+        </div>
+        ${related.length?`<div class="related"><div class="related-title">📎 관련 법규·기준</div>${related.map(r=>{
+          const rc=CATS.find(x=>x.id===r.cat);
+          return `<div class="related-item ${r.type==="link"?"link":""}" onclick="${r.type==="link"?`window.open('${r.url}','_blank')`:`setState({sel:DB.find(x=>x.id===${r.id})})`}">
+            <span class="badge" style="color:${rc?.color};background:${rc?.color}10">${rc?.icon}${r.cat}</span>
+            <span style="font-size:12px;font-weight:600;color:#344054;flex:1">${r.title}</span>
+            ${r.type==="link"?`<span style="font-size:9px;color:#059669">↗</span>`:""}
+          </div>`;
+        }).join("")}</div>`:""}
+      </div>`;
+    }else{
+      html+=`
+      <div class="search-bar"><span style="color:#94A3B8">🔍</span>
+        <input value="${state.q}" oninput="onSearchInput(this)" oncompositionstart="composing=true" oncompositionend="onSearchCompositionEnd(this)" placeholder="법령·KDS·KCS·키워드 검색...">
+        ${state.q?`<button onclick="setState({q:''})">✕</button>`:""}
+      </div>
+      <div class="filters">
+        ${[{v:"all",l:"전체"},{v:"detail",l:"📖 상세해설"},{v:"link",l:"↗ 원문연결"}].map(({v,l})=>`<button class="filter-btn ${state.typeF===v?"active":""}" style="${state.typeF===v?"background:#1E293B;color:#fff":"background:#fff;color:#64748B"}" onclick="setState({typeF:'${v}'})">${l}</button>`).join("")}
+      </div>
+      <div class="cats">${CATS.map(x=>`<button class="cat-btn" style="${state.cat===x.id?`background:${x.color};color:#fff;box-shadow:0 3px 10px ${x.color}28`:`background:#fff;color:#667085`}" onclick="setState({cat:'${x.id}'})">${x.icon} ${x.label}</button>`).join("")}</div>
+      <div class="results-header">
+        <span class="results-count">${filtered.length}건${state.q?` · <span style="color:#EF4444">"${state.q}"</span>`:""}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        ${filtered.length?filtered.map((item,i)=>{
+          const c=CATS.find(x=>x.id===item.cat);const isLink=item.type==="link";
+          return `<div class="card ${isLink?"link-card":""}" style="border-left:4px solid ${isLink?"#059669":c?.color||"#999"};animation-delay:${Math.min(i*.02,.25)}s" onclick="${isLink?`window.open('${item.url}','_blank')`:`setState({sel:DB.find(x=>x.id===${item.id})})`}">
+            ${!isLink?`<button class="card-fav ${state.favs.includes(item.id)?"active":""}" onclick="event.stopPropagation();togFav(${item.id})">★</button>`:""}
+            <div class="card-badges">
+              <span class="badge" style="color:${c?.color};background:${c?.color}10">${c?.icon} ${item.cat}</span>
+              ${isLink?`<span class="badge" style="color:#059669;background:#DCFCE7">↗ 원문연결</span>`:""}
+              ${item.code?`<span class="badge" style="color:#0891B2;background:#ECFEFF">${item.code}</span>`:""}
+              ${item.source&&SRC[item.source]?`<span style="font-size:9px;color:#94A3B8;font-weight:600">${SRC[item.source].icon} ${SRC[item.source].name}</span>`:""}
+            </div>
+            <div class="card-title" style="${isLink?"padding-right:0":""}">${item.title}</div>
+            <div class="card-law">${item.law}</div>
+            ${isLink?`<div style="font-size:11px;color:#059669;margin-top:6px;font-weight:600">↗ 클릭하면 원문 페이지로 이동</div>`:""}
+            ${!isLink&&item.tables&&item.tables.length?`<div style="font-size:10px;color:#7C3AED;margin-top:6px;font-weight:600">📊 표 ${item.tables.length}개 포함</div>`:""}
+          </div>`;
+        }).join(""):`<div class="no-results"><div class="icon">🔍</div><div class="title">검색 결과 없음</div></div>`}
+      </div>`;
+    }
+  }
+
+  // ── CHAT TAB ──
+  if(state.tab==="chat"){
+    if(!state.msgs.length){
+      html+=`<div class="chat-welcome">
+        <div class="chat-icon">🏛️</div>
+        <h3 style="font-size:17px;font-weight:800;color:#0F172A;margin-bottom:4px">건축법규 AI</h3>
+        <p style="font-size:11px;color:#94A3B8;margin-bottom:20px">Google Gemini AI가 법규 데이터베이스를 기반으로 답변합니다 · 무료</p>
+        <div style="width:100%;display:flex;flex-direction:column;gap:5px">
+          ${POPQ.map(q=>`<button class="chat-q" onclick="setState({ci:'${q}'});document.getElementById('chatInput')?.focus()">💬 ${q}</button>`).join("")}
+        </div>
+      </div>`;
+    }else{
+      html+=`<div style="flex:1;display:flex;flex-direction:column;gap:12px;padding-bottom:14px">
+        ${state.msgs.map(m=>`<div class="msg ${m.role==="user"?"msg-user":"msg-ai"}"><div class="msg-bubble">${m.role==="assistant"?`<div class="msg-label">🏛️ 건축법규 AI</div>`:""}${m.text.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>")}</div></div>`).join("")}
+        ${state.ld?`<div class="loading-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span style="font-size:11px;color:#94A3B8">법규 확인 중...</span></div>`:""}
+        <div id="chatEnd"></div>
+      </div>`;
+    }
+    html+=`<div class="chat-input-wrap">
+      ${state.msgs.length?`<button class="chat-new" onclick="setState({msgs:[]})">새 대화</button>`:""}
+      <div class="chat-input">
+        <input id="chatInput" value="${state.ci.replace(/"/g,"&quot;")}" oninput="state.ci=this.value" oncompositionstart="composing=true" oncompositionend="composing=false;state.ci=this.value" onkeydown="if(!composing&&event.key==='Enter'&&!event.shiftKey)sendChat()" placeholder="건축 법규에 대해 무엇이든 질문하세요... (AI 무료)">
+        <button class="send-btn ${state.ci.trim()&&!state.ld?"active":"inactive"}" onclick="sendChat()">➤</button>
+      </div>
+    </div>`;
+  }
+
+  html+=`</div>`;
+
+  // 어떤 input에 포커스가 있었는지 기억
+  const prevFocus=document.activeElement?.id||document.activeElement?.className||"";
+  const prevStart=document.activeElement?.selectionStart||0;
+  const prevEnd=document.activeElement?.selectionEnd||0;
+  
+  app.innerHTML=html;
+  
+  // 렌더링 후 포커스·커서 복원 (한글+영어 모두 지원)
+  if(state.tab==="search"&&!state.sel){
+    const si=app.querySelector('.search-bar input');
+    if(si&&state.q){
+      si.value=state.q;
+      if(prevFocus.includes("search")||prevFocus===""){
+        si.focus();
+        si.setSelectionRange(state.q.length,state.q.length);
+      }
+    }
+  }
+  if(state.tab==="chat"){
+    const ci=document.getElementById("chatInput");
+    if(ci&&state.ci){
+      ci.value=state.ci;
+    }
+  }
+}
+
+// ═══ INIT ═══
+render();
+</script>
+</body>
+</html>
